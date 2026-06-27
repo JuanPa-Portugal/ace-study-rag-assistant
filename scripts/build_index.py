@@ -8,7 +8,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from ace_assistant.chunking import build_chunks
 from ace_assistant.config import settings
-from ace_assistant.embeddings import LocalEmbeddingModel
+from ace_assistant.embeddings import GeminiEmbeddingModel
 from ace_assistant.loaders import load_sources
 from ace_assistant.vector_store import ChromaVectorStore
 
@@ -19,7 +19,10 @@ def main() -> None:
     if not chunks:
         raise RuntimeError("No chunks were generated from the source files.")
 
-    embedding_model = LocalEmbeddingModel(settings.embedding_model_name)
+    embedding_model = GeminiEmbeddingModel(
+    model_name=settings.embedding_model_name,
+    output_dimensionality=settings.embedding_output_dimensionality,
+)
     embeddings = embedding_model.embed_documents([chunk.text for chunk in chunks])
 
     store = ChromaVectorStore(settings.chroma_dir, settings.collection_name)

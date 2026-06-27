@@ -2,5 +2,5 @@ streamlit>=1.37
 python-dotenv>=1.0
 pypdf>=4.0
 chromadb>=0.5
-sentence-transformers>=3.0
 google-genai>=1.0
+pandas>=2.0

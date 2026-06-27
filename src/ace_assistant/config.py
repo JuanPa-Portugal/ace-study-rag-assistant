@@ -12,7 +12,10 @@ class Settings:
     data_dir: Path = project_root / "data"
     chroma_dir: Path = project_root / "chroma_db"
     collection_name: str = "ace_study_documents"
-    embedding_model_name: str = os.getenv("EMBEDDING_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
+    embedding_model_name: str = os.getenv("EMBEDDING_MODEL_NAME", "gemini-embedding-2")
+    embedding_output_dimensionality: int = int(
+        os.getenv("EMBEDDING_OUTPUT_DIMENSIONALITY", "768")
+    )
     gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     top_k: int = int(os.getenv("TOP_K", "5"))
 

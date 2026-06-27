@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from ace_assistant.config import settings
-from ace_assistant.embeddings import LocalEmbeddingModel
+from ace_assistant.embeddings import GeminiEmbeddingModel
 from ace_assistant.llm_client import GeminiClient
 from ace_assistant.models import RagAnswer, RetrievedChunk
 from ace_assistant.vector_store import ChromaVectorStore
@@ -42,7 +42,10 @@ class RagPipeline:
     """Coordinates embedding, retrieval and answer generation."""
 
     def __init__(self) -> None:
-        self._embeddings = LocalEmbeddingModel(settings.embedding_model_name)
+        self._embeddings = GeminiEmbeddingModel(
+    model_name=settings.embedding_model_name,
+    output_dimensionality=settings.embedding_output_dimensionality,
+)
         self._store = ChromaVectorStore(settings.chroma_dir, settings.collection_name)
         self._llm = GeminiClient(settings.gemini_model)
 

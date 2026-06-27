@@ -1,0 +1,7 @@
+{
+  "project": "ACE Study Assistant",
+  "version": "0.1.0",
+  "language": "es",
+  "document_count": 6,
+  "purpose": "RAG assistant for Google Cloud Associate Cloud Engineer study"
+}

@@ -1,0 +1,20 @@
+categoria,comando,descripcion,ejemplo
+configuracion,gcloud init,Inicializa la configuracion local de Google Cloud CLI,gcloud init
+configuracion,gcloud auth login,Autentica un usuario para usar gcloud,gcloud auth login
+configuracion,gcloud config list,Muestra la configuracion activa de gcloud,gcloud config list
+configuracion,gcloud config set project,Establece el proyecto activo,gcloud config set project my-project-id
+proyectos,gcloud projects list,Lista proyectos disponibles,gcloud projects list
+apis,gcloud services enable,Habilita una API en un proyecto,gcloud services enable compute.googleapis.com
+compute,gcloud compute instances list,Lista instancias de Compute Engine,gcloud compute instances list
+compute,gcloud compute instances create,Crea una instancia de Compute Engine,gcloud compute instances create vm-demo --zone=us-central1-a
+compute,gcloud compute ssh,Conecta por SSH a una VM,gcloud compute ssh vm-demo --zone=us-central1-a
+compute,gcloud compute snapshots create,Crea snapshot de un disco,gcloud compute snapshots create snap-demo --source-disk=disk-demo --source-disk-zone=us-central1-a
+storage,gcloud storage buckets list,Lista buckets de Cloud Storage,gcloud storage buckets list
+storage,gcloud storage buckets create,Crea un bucket de Cloud Storage,gcloud storage buckets create gs://mi-bucket-demo --location=us-central1
+storage,gcloud storage cp,Copia archivos hacia o desde Cloud Storage,gcloud storage cp archivo.txt gs://mi-bucket-demo/
+iam,gcloud projects get-iam-policy,Muestra la politica IAM de un proyecto,gcloud projects get-iam-policy my-project-id
+iam,gcloud projects add-iam-policy-binding,Asigna un rol IAM a un principal,gcloud projects add-iam-policy-binding my-project-id --member=user:usuario@example.com --role=roles/viewer
+run,gcloud run deploy,Despliega una aplicacion en Cloud Run,gcloud run deploy app-demo --source . --region=us-central1
+run,gcloud run services list,Lista servicios de Cloud Run,gcloud run services list --region=us-central1
+gke,gcloud container clusters list,Lista clusters de GKE,gcloud container clusters list
+logging,gcloud logging read,Consulta logs desde Cloud Logging,"gcloud logging read ""resource.type=gce_instance"" --limit=10"

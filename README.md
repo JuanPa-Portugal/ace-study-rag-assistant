@@ -427,22 +427,30 @@ http://localhost:8501
 
 ---
 
-## Evidencia de deploy
+## Evidencia de deploy en OCI
 
-Estado actual:
+La aplicación fue desplegada en **Oracle Cloud Infrastructure (OCI)** utilizando una instancia Compute.
 
-```text
-Pendiente de deploy final en OCI.
-```
+- Servicio OCI utilizado: Compute VM
+- Sistema operativo: Ubuntu 22.04
+- Shape: VM.Standard.E2.1.Micro
+- Región: Brazil East (São Paulo)
+- URL pública: http://147.15.103.39:8501
+- Puerto utilizado: 8501
+- Estado: aplicación ejecutándose correctamente como servicio `systemd`
 
-Una vez desplegado, esta sección deberá actualizarse con:
+Validación realizada:
 
-* URL pública de la aplicación.
-* Captura de pantalla de la aplicación funcionando.
-* Breve descripción de la infraestructura utilizada.
-* Comando o método usado para levantar la aplicación.
-* Fecha de validación del deploy.
+- Índice vectorial construido correctamente.
+- 48 chunks cargados en ChromaDB.
+- Interfaz Streamlit accesible desde navegador público.
+- Respuestas generadas con Gemini API.
+- Fuentes visibles desde los documentos PDF y CSV recuperados.
+- Servicio Linux activo con `systemctl`.
 
+Captura de evidencia:
+
+![Evidencia del deploy en OCI](assets/oci-deploy-evidence.png)
 ---
 
 ## Fuentes oficiales utilizadas para construir la documentación

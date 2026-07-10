@@ -14,22 +14,33 @@ from ace_assistant.vector_store import ChromaVectorStore
 
 
 def main() -> None:
-    raw_items = load_sources(settings.docs_dir, settings.data_dir)
+    settings.ensure_directories()
+
+    raw_items = load_sources(
+        docs_dir=[settings.docs_dir, settings.upload_docs_dir],
+        data_dir=[settings.data_dir, settings.upload_data_dir],
+    )
+
     chunks = build_chunks(raw_items)
+
     if not chunks:
         raise RuntimeError("No chunks were generated from the source files.")
 
     embedding_model = GeminiEmbeddingModel(
-    model_name=settings.embedding_model_name,
-    output_dimensionality=settings.embedding_output_dimensionality,
-)
+        model_name=settings.embedding_model_name,
+        output_dimensionality=settings.embedding_output_dimensionality,
+    )
+
     embeddings = embedding_model.embed_documents([chunk.text for chunk in chunks])
 
     store = ChromaVectorStore(settings.chroma_dir, settings.collection_name)
     store.reset_collection()
     store.add_chunks(chunks, embeddings)
 
-    print(f"Index built successfully: {len(chunks)} chunks stored in {settings.chroma_dir}")
+    print(
+        f"Index built successfully: {len(chunks)} chunks stored in "
+        f"{settings.chroma_dir}"
+    )
 
 
 if __name__ == "__main__":

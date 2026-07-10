@@ -149,19 +149,28 @@ def answer_simple_greeting() -> str:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+if "upload_widget_key" not in st.session_state:
+    st.session_state.upload_widget_key = 0
+
+if "sidebar_notice" not in st.session_state:
+    st.session_state.sidebar_notice = None
 
 with st.sidebar:
     st.header("Configuración")
+
+    if st.session_state.sidebar_notice:
+        st.success(st.session_state.sidebar_notice)
+        st.session_state.sidebar_notice = None
 
     if st.button("Reconstruir índice vectorial", use_container_width=True):
         with st.spinner("Reconstruyendo índice..."):
             ok, output = rebuild_index()
 
         if ok:
-            st.success("Índice reconstruido correctamente.")
-            st.caption(output)
+             st.session_state.sidebar_notice = "Índice reconstruido correctamente."
+             st.rerun()
         else:
-            st.error("No se pudo reconstruir el índice.")
+            st.error("Los archivos se guardaron, pero falló la reconstrucción del índice.")
             st.code(output)
 
     if st.button("Limpiar chat", use_container_width=True):
@@ -176,6 +185,7 @@ with st.sidebar:
         "Agregar archivos para alimentar a la IA",
         type=["pdf", "csv", "txt", "md"],
         accept_multiple_files=True,
+        key=f"document-uploader-{st.session_state.upload_widget_key}",
     )
 
     if st.button("Guardar archivos y reconstruir índice", use_container_width=True):
@@ -189,8 +199,11 @@ with st.sidebar:
                     ok, output = rebuild_index()
 
                 if ok:
-                    st.success(f"Se guardaron {len(saved_paths)} archivo(s).")
-                    st.caption("El índice fue actualizado correctamente.")
+                    st.session_state.upload_widget_key += 1
+                    st.session_state.sidebar_notice = (
+                        f"Se guardaron {len(saved_paths)} archivo(s) y el índice fue actualizado."
+                    )
+                    st.rerun()
                 else:
                     st.error("Los archivos se guardaron, pero falló la reconstrucción del índice.")
                     st.code(output)
@@ -221,7 +234,8 @@ with st.sidebar:
                             ok, output = rebuild_index()
 
                             if ok:
-                                st.success("Documento eliminado e índice actualizado.")
+                                st.session_state.upload_widget_key += 1
+                                st.session_state.sidebar_notice = "Documento eliminado e índice actualizado."
                                 st.rerun()
                             else:
                                 st.error("Documento eliminado, pero falló la reconstrucción del índice.")

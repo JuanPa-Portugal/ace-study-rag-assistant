@@ -469,7 +469,7 @@ Validación realizada:
 
 Captura de evidencia:
 
-![Evidencia del deploy en OCI](assets/oci-deploy-evidence.png)
+![Evidencia del deploy en OCI](assets/oci-deploy-evidence-2.png)
 ---
 
 ## Fuentes oficiales utilizadas para construir la documentación

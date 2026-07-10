@@ -25,6 +25,70 @@ st.set_page_config(
     layout="wide",
 )
 
+CUSTOM_CSS = """
+<style>
+    .main {
+        background: linear-gradient(135deg, #0f172a 0%, #111827 45%, #1e293b 100%);
+    }
+
+    section[data-testid="stSidebar"] {
+        background: #020617;
+        border-right: 1px solid #1e293b;
+    }
+
+    section[data-testid="stSidebar"] h1,
+    section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3 {
+        color: #e5e7eb;
+    }
+
+    .hero-card {
+        padding: 2rem;
+        border-radius: 1.25rem;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.22), rgba(14, 165, 233, 0.12));
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+        font-size: 2.4rem;
+        font-weight: 800;
+        color: #f8fafc;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.05rem;
+        color: #cbd5e1;
+        max-width: 900px;
+    }
+
+    .source-badge {
+        display: inline-block;
+        padding: 0.25rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(34, 197, 94, 0.15);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.35);
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+    }
+
+    div[data-testid="stChatMessage"] {
+        border-radius: 1rem;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        background: rgba(15, 23, 42, 0.65);
+    }
+
+    .stButton > button {
+        border-radius: 0.75rem;
+        font-weight: 600;
+    }
+</style>
+"""
+
+st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
 
 @st.cache_resource(show_spinner="Cargando pipeline RAG...")
 def get_pipeline() -> RagPipeline:
@@ -148,9 +212,17 @@ with st.sidebar:
     )
 
 
-st.title("☁️ ACE Study Assistant")
-st.caption(
-    "Agente RAG para estudiar Google Cloud Associate Cloud Engineer usando documentos propios."
+st.markdown(
+    """
+    <div class="hero-card">
+        <div class="hero-title">☁️ ACE Study Assistant</div>
+        <div class="hero-subtitle">
+            Agente RAG para estudiar Google Cloud Associate Cloud Engineer usando documentos propios.
+            Puedes consultar la base actual, agregar nuevos PDF/CSV/TXT/MD y reconstruir el índice vectorial desde la interfaz.
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 for message in st.session_state.messages:
@@ -172,6 +244,7 @@ if question:
             with st.spinner("Buscando en la documentación y generando respuesta..."):
                 rag_answer = pipeline.answer(question)
 
+            st.markdown('<span class="source-badge">Fuente usada: RAG</span>', unsafe_allow_html=True)
             st.markdown(rag_answer.answer)
 
             with st.expander("Fuentes recuperadas"):

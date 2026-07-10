@@ -111,6 +111,40 @@ def rebuild_index() -> tuple[bool, str]:
     get_pipeline.clear()
     return True, result.stdout
 
+def is_simple_greeting(question: str) -> bool:
+    """Detect simple greetings that do not need RAG retrieval."""
+    normalized = question.lower().strip()
+
+    greetings = {
+        "hola",
+        "hola!",
+        "hola,",
+        "buenas",
+        "buen dia",
+        "buen día",
+        "buenas tardes",
+        "buenas noches",
+        "como estas",
+        "cómo estás",
+        "hola como estas",
+        "hola cómo estás",
+        "hey",
+        "hi",
+        "hello",
+    }
+
+    return normalized in greetings
+
+
+def answer_simple_greeting() -> str:
+    """Return a friendly greeting without querying the vector database."""
+    return (
+        "¡Hola! Estoy listo para ayudarte a estudiar para la certificación "
+        "Google Cloud Associate Cloud Engineer. Puedes preguntarme sobre IAM, "
+        "Compute Engine, Cloud Run, redes, billing, comandos `gcloud` o pedirme "
+        "preguntas tipo examen."
+    )
+
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -239,36 +273,47 @@ if question:
 
     with st.chat_message("assistant"):
         try:
-            pipeline = get_pipeline()
+            if is_simple_greeting(question):
+                greeting_answer = answer_simple_greeting()
+                st.markdown(greeting_answer)
 
-            with st.spinner("Buscando en la documentación y generando respuesta..."):
-                rag_answer = pipeline.answer(question)
+                st.session_state.messages.append(
+                    {"role": "assistant", "content": greeting_answer}
+                )
 
-            st.markdown('<span class="source-badge">Fuente usada: RAG</span>', unsafe_allow_html=True)
-            st.markdown(rag_answer.answer)
+            else:
+                pipeline = get_pipeline()
 
-            with st.expander("Fuentes recuperadas"):
-                for idx, chunk in enumerate(rag_answer.sources, start=1):
-                    source = chunk.metadata.get("source_file", "fuente_desconocida")
-                    page = chunk.metadata.get("page")
-                    row = chunk.metadata.get("row")
+                with st.spinner("Buscando en la documentación y generando respuesta..."):
+                    rag_answer = pipeline.answer(question)
 
-                    if page:
-                        location = f"página {page}"
-                    elif row:
-                        location = f"fila {row}"
-                    else:
-                        location = "sin ubicación"
+                st.markdown(
+                    '<span class="source-badge">Fuente usada: RAG</span>',
+                    unsafe_allow_html=True,
+                )
+                st.markdown(rag_answer.answer)
 
-                    st.markdown(f"**{idx}. {source}** - {location}")
-                    st.caption(
-                        chunk.text[:600] + ("..." if len(chunk.text) > 600 else "")
-                    )
+                with st.expander("Fuentes recuperadas"):
+                    for idx, chunk in enumerate(rag_answer.sources, start=1):
+                        source = chunk.metadata.get("source_file", "fuente_desconocida")
+                        page = chunk.metadata.get("page")
+                        row = chunk.metadata.get("row")
 
-            st.session_state.messages.append(
-                {"role": "assistant", "content": rag_answer.answer}
-            )
+                        if page:
+                            location = f"página {page}"
+                        elif row:
+                            location = f"fila {row}"
+                        else:
+                            location = "sin ubicación"
 
+                        st.markdown(f"**{idx}. {source}** - {location}")
+                        st.caption(
+                            chunk.text[:600] + ("..." if len(chunk.text) > 600 else "")
+                        )
+
+                st.session_state.messages.append(
+                    {"role": "assistant", "content": rag_answer.answer}
+                )
         except Exception as exc:
             error_message = f"No pude responder todavía: {exc}"
             st.error(error_message)

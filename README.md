@@ -112,6 +112,7 @@ ace-study-rag-assistant/
  │   └── ace_assistant/
  │       ├── chunking.py           # División de documentos en chunks
  │       ├── config.py             # Configuración central del proyecto
+ │       ├── document_manager.py    # Gestión de documentos subidos desde la interfaz
  │       ├── embeddings.py         # Embeddings con Gemini API
  │       ├── llm_client.py         # Cliente Gemini para generación de respuestas
  │       ├── loaders.py            # Carga de PDFs y CSVs
@@ -490,7 +491,7 @@ Captura de evidencia:
 * No incluye autenticación de usuarios.
 * No incluye reranking.
 * No incluye filtros por dominio del examen.
-* El índice vectorial se reconstruye manualmente con `scripts/build_index.py`.
+* La versión actual permite reconstruir el índice desde la interfaz, aunque todavía no cuenta con actualización automática en segundo plano.
 * El deploy final en OCI debe completarse y documentarse con evidencia.
 * La aplicación depende de una API Key válida de Gemini.
 

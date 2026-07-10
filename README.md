@@ -22,6 +22,24 @@ Ejemplos:
 
 ---
 
+## Funcionalidades principales
+
+La versión actual del agente incluye las siguientes funcionalidades:
+
+* Interfaz web en Streamlit para realizar preguntas en lenguaje natural.
+* Carga inicial de documentos desde las carpetas `docs/` y `data/`.
+* Soporte para archivos PDF, CSV, TXT y Markdown.
+* Carga de nuevos documentos desde la barra lateral de la aplicación.
+* Gestión visual de documentos disponibles.
+* Eliminación de documentos subidos desde la interfaz.
+* Reconstrucción del índice vectorial desde Streamlit sin ejecutar comandos manuales.
+* Recuperación semántica usando ChromaDB.
+* Generación de respuestas con Gemini API.
+* Visualización de fuentes recuperadas por cada respuesta.
+* Manejo de saludos simples sin forzar una consulta RAG innecesaria.
+
+---
+
 ## Objetivo del proyecto
 
 Construir un agente inteligente funcional que permita:
